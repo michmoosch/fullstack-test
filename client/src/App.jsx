@@ -10,7 +10,7 @@ function App() {
 
   const getData = async () => {
     console.log("Fetching");
-    const msg = await fetch(url + "/");
+    const msg = await fetch("/api/get");
     const newData = await msg.json();
     setData((prev) => newData);
   };

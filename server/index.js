@@ -1,5 +1,6 @@
 const express = require("express");
 const cors = require("cors");
+const mysql = require("mysql2");
 const app = express();
 const { Configuration, OpenAIApi } = require("openai");
 
@@ -7,9 +8,15 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+const db = mysql.createPool({
+  host: "mysql_db",
+  user: "MYSQL_USER",
+  password: "MYSQL_PASSWORD",
+  database: "uploadme",
+});
+
 const API_KEY = process.env.OPENAI_API;
 const API_ORG = process.env.OPENAI_ORG;
-
 const config = new Configuration({
   organization: API_ORG,
   apiKey: API_KEY,
@@ -25,6 +32,23 @@ app.get("/get", async (req, res) => {
   const text = completion.data.choices[0].message.content;
 
   res.send(text);
+});
+
+app.get("/getPersonas", async (req, res) => {
+  const SelectQuery = "SELECT * FROM personas";
+  db.query(SelectQuery, (err, result) => {
+    console.log(result);
+    res.json(result);
+  });
+});
+
+app.post("/getPersona", async (req, res) => {
+  const id = parseInt(req.body.id);
+  const Select = "SELECT * FROM personas WHERE id = ?";
+  db.query(Select, id, (err, result) => {
+    if (err) console.log(err);
+    res.json(result);
+  });
 });
 
 app.post("/post", async (req, res) => {
@@ -51,9 +75,20 @@ app.post("/embedify", async (req, res) => {
   // res.json(embed);
 });
 
+app.post("/insert", async (req, res) => {
+  const description = req.body.body;
+  const name = req.body.name;
+  console.log(name);
+  console.log(description);
+  const insertQuery = "INSERT INTO personas (name, description) VALUES (?, ?)";
+  db.query(insertQuery, [name, description], (err, result) => {
+    res.json(JSON.stringify(result));
+  });
+});
+
 app.listen("3001", () => {});
 
-async function insert(name, embedding) {}
+// async function insert(name, embedding) {}
 
 async function getEmbedding(string) {
   console.log(string);

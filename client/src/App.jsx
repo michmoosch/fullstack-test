@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { getEmbed, insert } from "./components/api";
 import axios from "axios";
 import {
   Button,
@@ -10,8 +11,6 @@ import {
 } from "react-bootstrap";
 import "./App.css";
 
-const url = "http://localhost:3001";
-
 function App() {
   const [data, setData] = useState();
 
@@ -21,32 +20,12 @@ function App() {
     setData((prev) => newData);
   };
 
-  const postData = async (name, description) => {
-    console.log(j);
-
-    // setData((prev) => msg);
-  };
-
-  async function getEmbed(description) {
-    const resp = await fetch("/api/embedify", {
-      method: "POST",
-      body: JSON.stringify({
-        body: description,
-      }),
-      headers: {
-        "Content-type": "application/json; charset=UTF-8",
-      },
-    });
-    const msg = await resp.json();
-    const j = JSON.parse(msg);
-    console.log(j);
-  }
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     const name = e.target.avatarName.value;
     const description = e.target.personaDescription.value;
-    await getEmbed(description);
+    const obj = await insert(name, description);
+    console.log(obj);
   };
 
   useEffect(() => {}, []);

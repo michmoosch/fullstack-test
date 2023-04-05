@@ -1,4 +1,5 @@
 # Fullstack docker image test
 
 ## docker-compose up --build
-## localhost:3050
+## App: localhost:3050
+## Admin: localhost:8000

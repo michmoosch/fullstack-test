@@ -1,56 +1,21 @@
-async function getEmbed(description) {
-  const resp = await fetch("/api/embedify", {
-    method: "POST",
-    body: JSON.stringify({
-      body: description,
-    }),
-    headers: {
-      "Content-type": "application/json; charset=UTF-8",
-    },
-  });
+async function testConnection() {
+  const resp = await fetch("/api/");
   const msg = await resp.json();
-  const j = JSON.parse(msg);
-  console.log(j);
+  console.log(msg);
 }
 
-const insert = async (name, description) => {
-  const resp = await fetch("/api/insert", {
+async function registerUser(obj){
+  const resp = await fetch("/api/registerUser", {
     method: "POST",
-    body: JSON.stringify({
-      name: name,
-      body: description,
-    }),
     headers: {
-      "Content-type": "application/json; charset=UTF-8",
+      "Content-type": "application/json",
     },
+    body: JSON.stringify(obj)
   });
+  
+  
+  const reply = await resp.json()
+  return reply;
+}
 
-  const obj = await resp.json();
-  return obj;
-};
-
-// const getPersona = async (name) => {
-//     const msg = await fetch("/api/getPersona");
-// }
-
-const getPersonas = async () => {
-  const msg = await fetch("/api/getPersonas");
-  const obj = await msg.json();
-  return obj;
-};
-
-const getPersona = async (id) => {
-  const resp = await fetch("/api/getPersona", {
-    method: "POST",
-    body: JSON.stringify({
-      id: id,
-    }),
-    headers: {
-      "Content-type": "application/json; charset=UTF-8",
-    },
-  });
-  const obj = await resp.json();
-  return obj;
-};
-
-export { getEmbed, insert, getPersona, getPersonas };
+export { testConnection, registerUser };

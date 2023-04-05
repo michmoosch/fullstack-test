@@ -1,7 +1,7 @@
 version: "3.9"
 
 x-common-variables: &common-variables
-  MYSQL_DATABASE: uploadme
+  MYSQL_DATABASE: CS160Project
   MYSQL_USER: MYSQL_USER
   MYSQL_PASSWORD: MYSQL_PASSWORD
 
